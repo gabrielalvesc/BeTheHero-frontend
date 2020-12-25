@@ -10,6 +10,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.1.0",
+    "react-intl-currency-input": "^0.2.6",
     "react-router-dom": "^5.2.0",
     "react-router-guards": "^1.0.2",
     "react-scripts": "4.0.1",

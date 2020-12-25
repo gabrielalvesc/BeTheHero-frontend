@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
+import IntlCurrencyInput from "react-intl-currency-input"
 
 import './styles.css';
 
@@ -8,19 +9,38 @@ import logoImg from '../../assets/logo.svg'
 
 import BaseService from '../../services/base-service';
 
+const currencyConfig = {
+    locale: "pt-BR",
+    formats: {
+        number: {
+            BRL: {
+                style: "currency",
+                currency: "BRL",
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+            },
+        },
+    },
+};
+
 export default function NewIncident() {
 
     const history = useHistory();
 
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(null);
 
     async function handleNewIncident(e) {
         e.preventDefault();
         BaseService.post('incidents', { title, description, value }).then(() => {
             history.push('/profile')
         });
+    }
+
+    const onInputMaskedChange = (event, value, maskedValue) => {
+        event.preventDefault();
+        setValue(value)
     }
 
     return (
@@ -36,23 +56,20 @@ export default function NewIncident() {
                     </Link>
                 </section>
                 <form onSubmit={handleNewIncident}>
-                    <input 
+                    <input
                         placeholder="Título do caso"
                         value={title}
                         onChange={e => setTitle(e.target.value)}
                     />
 
-                    <textarea 
+                    <textarea
                         placeholder="Descrição"
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                     ></textarea>
 
-                    <input 
-                        placeholder="Valor em reais"
-                        value={value}
-                        onChange={e => setValue(e.target.value)}
-                    />
+                    <IntlCurrencyInput placeholder="Valor em reais" currency="BRL" config={currencyConfig}
+                        onChange={onInputMaskedChange} />
                     <button className="button" type="submit">Cadastrar</button>
                 </form>
             </div>
